@@ -50,23 +50,21 @@ To run this project locally:
    cd project-lingap-blood-bank
 
 3. Create and activate a virtual environment:
-   python -m venv .venv
-   Windows: .venv\Scripts\activate
-   Mac/Linux: source .venv/bin/activate
+   python -m venv .venv (Windows: .venv\Scripts\activate | Mac/Linux: source .venv/bin/activate)
 
-4. Install dependencies:
+5. Install dependencies:
    pip install -r requirements.txt
 
-5. Apply database migrations:
+6. Apply database migrations:
    python manage.py migrate
 
-6. Create a superuser (to access Admin features):
+7. Create a superuser (to access Admin features):
    python manage.py createsuperuser
 
-7. Run the development server:
+8. Run the development server:
    python manage.py runserver
 
-8. Open your browser and visit: http://127.0.0.1:8000/
+9. Open your browser and visit: http://127.0.0.1:8000/
 
 **CONTACT**
 -------
