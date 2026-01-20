@@ -1,4 +1,5 @@
 **PROJECT LINGAP: RED CROSS BLOOD BANK MANAGEMENT SYSTEM**
+======================================================
 
 **ABOUT THE PROJECT**
 -----------------
@@ -50,8 +51,8 @@ To run this project locally:
 
 3. Create and activate a virtual environment:
    python -m venv .venv
-   # Windows: .venv\Scripts\activate
-   # Mac/Linux: source .venv/bin/activate
+   Windows: .venv\Scripts\activate
+   Mac/Linux: source .venv/bin/activate
 
 4. Install dependencies:
    pip install -r requirements.txt
