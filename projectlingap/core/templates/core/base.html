@@ -1,0 +1,240 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Project LINGAP | Red Cross Cavite</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="{% static 'images/prc_logo.png' %}">
+    <style>
+        @font-face {
+            font-family: 'Gilroy';
+            src: url('./../../../static/fonts/Gilroy-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Gilroy';
+            src: url('./../../../static/fonts/Gilroy-Bold.ttf') format('truetype');
+            font-weight: bold;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Gilroy';
+            src: url('./../../../static/fonts/Gilroy-Heavy.ttf') format('truetype');
+            font-weight: 900;
+            font-style: normal;
+        }
+
+        .navbar .dropdown-toggle:hover,
+        .navbar .dropdown-toggle:focus {
+            color: #212529 !important; /* Dark text */
+            background-color: #ffffff !important; /* White background */
+        }
+
+        body, h1, h2, h3, h4, h5, h6, p, a, span, button, input, textarea, .btn, .navbar {
+            font-family: 'Gilroy', sans-serif !important;
+        }
+
+        h1, h2, h3, .navbar-brand {
+            font-weight: 900;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+        main { flex: 1; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-danger sticky-top shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <img src="{% static 'images/project-lingap_logo.svg' %}" alt="Project Lingap" height="27" class="d-inline-block align-text-top">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+
+                {% if request.user.is_authenticated %}
+
+                    {% if request.user.is_superuser %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'superuser_dashboard' %}">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'campaign_list' %}">Campaigns</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'inventory_list' %}">Inventory</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'request_list' %}">Requests</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'donor_list' %}">Donors</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'volunteer_list' %}">Volunteers</a></li>
+
+                        <li class="nav-item ms-2">
+                            <a class="btn btn-sm btn-dark fw-bold border-light" href="/admin/" target="_blank">
+                                <i class="fa-solid fa-screwdriver-wrench me-1"></i> Admin Panel
+                            </a>
+                        </li>
+
+                    {% elif request.user.is_staff %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'redcross_dashboard' %}">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'campaign_list' %}">Campaigns</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'donor_list' %}">Donors</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'request_list' %}">Requests</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'inventory_list' %}">Inventory</a></li>
+
+                    {% else %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'donor_dashboard' %}">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'donor_history' %}">History</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'campaign_list' %}">Donate Now</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'request_blood' %}">Request Blood</a></li>
+                    {% endif %}
+
+                    <li class="nav-item dropdown ms-lg-3">
+                        <a class="nav-link dropdown-toggle btn btn-outline-light border-0 d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown">
+
+                            {% if request.user.is_superuser %}
+                                <span class="badge bg-danger border border-light">ADMIN</span>
+                            {% elif request.user.is_staff %}
+                                <span class="badge bg-info text-dark border border-light">STAFF</span>
+                            {% else %}
+                                <span class="badge bg-success border border-light">DONOR</span>
+                            {% endif %}
+
+                            <span class="fw-bold">{{ request.user.username }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow">
+                            <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form action="{% url 'logout' %}" method="post" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="dropdown-item text-danger fw-bold">Logout</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}#about">About Us</a></li>
+                    <li class="nav-item ms-lg-3">
+                        <a class="btn btn-light text-danger fw-bold px-4" href="{% url 'login' %}">Login</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+    </nav>
+
+    <div class="container mt-3">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="mt-5" style="background-color: #333333; color: white; padding-top: 60px; margin-top: auto;">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-7 mb-5">
+                    <h5 class="fw-bold text-uppercase mb-4">Philippine Red Cross - Cavite Chapter</h5>
+
+                    <p class="small text-white-50" style="line-height: 1.6; max-width: 90%;">
+                        Born officially in 1947, but with roots that traces back to the revolutionary days, the Philippine Red Cross
+                        has truly become the premier humanitarian organization in the country, committed to provide
+                        quality life-saving services that protect the life and dignity especially of indigent Filipinos in
+                        vulnerable situations.
+                    </p>
+
+                    <div class="mb-5 small text-white">
+                        <p class="mb-1">Address: Samonte Park, San Roque, Cavite, Philippines</p>
+                        <p class="mb-1">Emergency Hotline: 143</p>
+                        <p class="mb-1">Contact No.: (046) 431 0562</p>
+                    </div>
+
+                    <div>
+                        <label class="text-uppercase small fw-bold mb-2 text-white-50">Subscribe to our Newsletter</label>
+                        <form class="d-flex" style="max-width: 450px;">
+                            <input type="email" class="form-control rounded-0 border-0 p-2" placeholder="Email Address">
+                            <button class="btn btn-danger rounded-0 px-4 fw-bold" type="button" style="background-color: #c0392b; border: none;">SUBMIT</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="col-md-5 mb-5 ps-md-5">
+                    <h5 class="fw-bold text-uppercase mb-4">Follow Us</h5>
+
+                    <div class="d-flex gap-3 mb-5">
+                        <style>
+                            .social-icon {
+                                display: inline-flex;
+                                justify-content: center;
+                                align-items: center;
+                                width: 45px;
+                                height: 45px;
+                                background-color: #4f4f4f;
+                                color: #b0b0b0;
+                                border-radius: 50%;
+                                text-decoration: none;
+                                transition: all 0.3s ease;
+                            }
+                            .social-icon:hover {
+                                background-color: #c0392b; /* Red hover */
+                                color: white;
+                                transform: translateY(-3px);
+                            }
+                        </style>
+
+                        <a href="https://www.facebook.com/BatangRedCross" target="_blank" class="social-icon">
+                            <i class="fa-brands fa-facebook-f fa-lg"></i>
+                        </a>
+                        <a href="https://x.com/philredcross" target="_blank" class="social-icon">
+                            <i class="fa-brands fa-twitter fa-lg"></i>
+                        </a>
+                        <a href="https://www.instagram.com/philredcross/" target="_blank" class="social-icon">
+                            <i class="fa-brands fa-instagram fa-lg"></i>
+                        </a>
+                        <a href="https://www.youtube.com/user/philredcrosstv" target="_blank" class="social-icon">
+                            <i class="fa-brands fa-youtube fa-lg"></i>
+                        </a>
+                    </div>
+
+                    <div>
+                        <p class="text-white-50 mb-3 small">Check out our Apps</p>
+                        <div class="d-flex gap-4 text-white fs-2">
+                            <i class="fa-solid fa-bandage" title="First Aid App"></i>
+                            <i class="fa-solid fa-shield-heart" title="Membership App"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center py-4" style="background-color: #1a1a1a; font-size: 0.85rem;">
+            <span class="text-white">Copyright 2026 <span class="text-danger">Philippine Red Cross</span></span>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

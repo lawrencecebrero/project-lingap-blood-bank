@@ -1,0 +1,107 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="mb-0 fw-bold text-danger">Blood Inventory</h3>
+        <a href="{% url 'inventory_create' %}" class="btn btn-dark">
+            <i class="fa-solid fa-plus me-2"></i>Add Blood Stock
+        </a>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body bg-light">
+            <form method="get" class="row g-3">
+                <div class="col-md-5">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0"><i class="fa-solid fa-search text-muted"></i></span>
+                        <input type="text" name="q" class="form-control border-start-0 ps-0" placeholder="Search by Serial Number..." value="{{ request.GET.q }}">
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <select name="blood_group" class="form-select">
+                        <option value="">All Blood Groups</option>
+                        <option value="A+" {% if request.GET.blood_group == 'A+' %}selected{% endif %}>A+</option>
+                        <option value="A-" {% if request.GET.blood_group == 'A-' %}selected{% endif %}>A-</option>
+                        <option value="B+" {% if request.GET.blood_group == 'B+' %}selected{% endif %}>B+</option>
+                        <option value="B-" {% if request.GET.blood_group == 'B-' %}selected{% endif %}>B-</option>
+                        <option value="AB+" {% if request.GET.blood_group == 'AB+' %}selected{% endif %}>AB+</option>
+                        <option value="AB-" {% if request.GET.blood_group == 'AB-' %}selected{% endif %}>AB-</option>
+                        <option value="O+" {% if request.GET.blood_group == 'O+' %}selected{% endif %}>O+</option>
+                        <option value="O-" {% if request.GET.blood_group == 'O-' %}selected{% endif %}>O-</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <select name="status" class="form-select">
+                        <option value="">All Statuses</option>
+                        <option value="AVAILABLE" {% if request.GET.status == 'AVAILABLE' %}selected{% endif %}>Available</option>
+                        <option value="RESERVED" {% if request.GET.status == 'RESERVED' %}selected{% endif %}>Reserved</option>
+                        <option value="EXPIRED" {% if request.GET.status == 'EXPIRED' %}selected{% endif %}>Expired</option>
+                        <option value="DISTRIBUTED" {% if request.GET.status == 'DISTRIBUTED' %}selected{% endif %}>Distributed</option>
+                    </select>
+                </div>
+
+                <div class="col-md-1">
+                    <button type="submit" class="btn btn-primary w-100">Filter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Serial Number</th>
+                        <th>Blood Group</th>
+                        <th>Source / Donor</th>
+                        <th>Status</th>
+                        <th>Expiry</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in inventory_items %}
+                    <tr>
+                        <td class="fw-bold">{{ item.serial_number }}</td>
+                        <td><span class="badge bg-danger">{{ item.blood_group }}</span></td>
+                        <td>
+                            {% if item.donor %}
+                                {{ item.donor.user.get_full_name }}
+                            {% else %}
+                                <span class="text-muted fst-italic">N/A</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if item.status == 'AVAILABLE' %}
+                                <span class="badge bg-success">Available</span>
+                            {% elif item.status == 'EXPIRED' %}
+                                <span class="badge bg-secondary">Expired</span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark">{{ item.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ item.expiry_date|date:"M d, Y" }}</td>
+                        <td>
+                            <a href="{% url 'inventory_update' item.pk %}" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-pen"></i></a>
+                            <a href="{% url 'inventory_delete' item.pk %}" class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-trash"></i></a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-muted">No inventory items found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% include 'core/includes/pagination.html' %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="fw-bold mb-4">
+        <span class="text-danger">Admin</span> Dashboard
+    </h2>
+
+    <div class="row text-center mb-4">
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm border-warning h-100">
+                <div class="card-body">
+                    <h5 class="card-title text-muted">Pending Requests</h5>
+                    <h2 class="display-4 fw-bold text-warning">{{ pending_requests }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm border-danger h-100">
+                <div class="card-body">
+                    <h5 class="card-title text-muted">Blood Units Available</h5>
+                    <h2 class="display-4 fw-bold text-danger">{{ available_blood }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm border-primary h-100">
+                <div class="card-body">
+                    <h5 class="card-title text-muted">Active Campaigns</h5>
+                    <h2 class="display-4 fw-bold text-primary">{{ active_campaigns }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="fw-bold mb-0">User Statistics</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="p-3 border rounded bg-light">
+                                <i class="fa-solid fa-users fa-3x text-success mb-3"></i>
+                                <h6 class="text-muted">Registered Donors</h6>
+                                <h2 class="fw-bold text-dark">{{ total_donors }}</h2>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <div class="p-3 border rounded bg-light">
+                                <i class="fa-solid fa-user-nurse fa-3x text-info mb-3"></i>
+                                <h6 class="text-muted">Red Cross Volunteers</h6>
+                                <h2 class="fw-bold text-dark">{{ total_volunteers }}</h2>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="fw-bold mb-0">System Management</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'donor_list' %}" class="list-group-item list-group-item-action py-3">
+                        <i class="fa-solid fa-users me-2 text-secondary"></i> Manage Donors
+                    </a>
+                    <a href="{% url 'inventory_list' %}" class="list-group-item list-group-item-action py-3">
+                        <i class="fa-solid fa-boxes-stacked me-2 text-secondary"></i> Blood Inventory
+                    </a>
+                    <a href="{% url 'campaign_list' %}" class="list-group-item list-group-item-action py-3">
+                        <i class="fa-solid fa-map-location-dot me-2 text-secondary"></i> View All Campaigns
+                    </a>
+                    <a href="{% url 'request_list' %}" class="list-group-item list-group-item-action py-3">
+                        <i class="fa-solid fa-file-medical me-2 text-secondary"></i> Manage Blood Requests
+                    </a>
+                    <a href="/admin/" target="_blank" class="list-group-item list-group-item-action py-3 list-group-item-dark">
+                        <i class="fa-solid fa-screwdriver-wrench me-2"></i> Advanced Admin Panel
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-danger">Transaction History</h2>
+        <a href="{% url 'donor_dashboard' %}" class="btn btn-outline-secondary">
+            <i class="fa-solid fa-arrow-left me-2"></i>Back to Dashboard
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-danger text-white fw-bold">
+                    <i class="fa-solid fa-hand-holding-droplet me-2"></i>My Donations
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Date</th>
+                                <th>Serial #</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in page_donations %}
+                            <tr>
+                                <td>{{ item.date_collected|date:"M d, Y" }}</td>
+                                <td class="fw-bold">{{ item.serial_number }}</td>
+                                <td><span class="badge bg-success">Completed</span></td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="3" class="text-center py-3 text-muted">No donations found.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer bg-white">
+                    <div class="d-flex justify-content-between align-items-center small">
+                        <span>Page {{ page_donations.number }} of {{ page_donations.paginator.num_pages }}</span>
+                        <div>
+                            {% if page_donations.has_previous %}
+                                <a href="?d_page={{ page_donations.previous_page_number }}&r_page={{ page_requests.number }}" class="btn btn-sm btn-outline-dark">&laquo;</a>
+                            {% endif %}
+                            {% if page_donations.has_next %}
+                                <a href="?d_page={{ page_donations.next_page_number }}&r_page={{ page_requests.number }}" class="btn btn-sm btn-outline-dark">&raquo;</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-primary text-white fw-bold">
+                    <i class="fa-solid fa-bed-pulse me-2"></i>My Requests
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Date</th>
+                                <th>Patient</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for req in page_requests %}
+                            <tr>
+                                <td>{{ req.request_date|date:"M d, Y" }}</td>
+                                <td class="fw-bold">{{ req.patient_name }}</td>
+                                <td>
+                                    {% if req.status == 'PENDING' %}<span class="badge bg-secondary">Pending</span>
+                                    {% elif req.status == 'APPROVED' %}<span class="badge bg-success">Approved</span>
+                                    {% else %}<span class="badge bg-dark">{{ req.status }}</span>{% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="3" class="text-center py-3 text-muted">No requests found.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer bg-white">
+                    <div class="d-flex justify-content-between align-items-center small">
+                        <span>Page {{ page_requests.number }} of {{ page_requests.paginator.num_pages }}</span>
+                        <div>
+                            {% if page_requests.has_previous %}
+                                <a href="?r_page={{ page_requests.previous_page_number }}&d_page={{ page_donations.number }}" class="btn btn-sm btn-outline-dark">&laquo;</a>
+                            {% endif %}
+                            {% if page_requests.has_next %}
+                                <a href="?r_page={{ page_requests.next_page_number }}&d_page={{ page_donations.number }}" class="btn btn-sm btn-outline-dark">&raquo;</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

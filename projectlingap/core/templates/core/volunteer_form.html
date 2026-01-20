@@ -1,0 +1,60 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="fw-bold mb-0">
+                        {% if form.instance.pk %}Edit Volunteer{% else %}Register New Volunteer{% endif %}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+
+                        {% for field in form %}
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">{{ field.label }}</label>
+                            {{ field }} {% if field.help_text %}
+                                <div class="form-text small">{{ field.help_text }}</div>
+                            {% endif %}
+                            {% if field.errors %}
+                                <div class="text-danger small">{{ field.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-success fw-bold">Save Volunteer</button>
+                            <a href="{% url 'volunteer_list' %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('input, select, textarea').forEach(e => {
+
+        if (e.type === 'checkbox') {
+            // Apply checkbox specific class
+            e.classList.add('form-check-input');
+            // Optional: Remove form-control if it got added by mistake
+            e.classList.remove('form-control');
+        } else {
+            // Otherwise, apply standard form styling
+            e.classList.add('form-control');
+        }
+    });
+
+    document.querySelectorAll('select').forEach(e => {
+        e.classList.remove('form-control');
+        e.classList.add('form-select');
+    });
+</script>
+
+{% endblock %}

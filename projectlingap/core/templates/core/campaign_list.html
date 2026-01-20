@@ -1,0 +1,77 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-danger">Blood Donation Campaigns</h2>
+            <p class="text-muted">
+                {% if user.is_staff %}
+                    Manage active drives and view past campaign records.
+                {% else %}
+                    Join a campaign near you and help save lives.
+                {% endif %}
+            </p>
+        </div>
+
+        {% if user.is_staff %}
+        <a href="{% url 'campaign_create' %}" class="btn btn-dark">
+            <i class="fa-solid fa-plus me-2"></i>New Campaign
+        </a>
+        {% endif %}
+    </div>
+
+    <div class="row">
+        {% for campaign in campaigns %}
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm h-100 border-0 {% if campaign.end_datetime < now %}bg-light{% endif %}">
+
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    {% now "Y-m-d H:i" as current_time %}
+                    {% if campaign.end_datetime|date:"Y-m-d H:i" < current_time %}
+                        <span class="badge bg-secondary">Completed</span>
+                    {% else %}
+                        <span class="badge bg-danger">Active</span>
+                    {% endif %}
+
+                    <small class="text-muted"><i class="fa-regular fa-clock me-1"></i> {{ campaign.start_datetime|date:"M d, Y" }}</small>
+                </div>
+
+                <div class="card-body">
+                    <h4 class="card-title fw-bold">{{ campaign.title }}</h4>
+                    <p class="card-text text-secondary mb-2">
+                        <i class="fa-solid fa-location-dot text-danger me-2"></i> {{ campaign.location }}
+                    </p>
+                    <p class="card-text small text-muted">{{ campaign.description|truncatewords:20 }}</p>
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="small text-muted">
+                            <strong>Time:</strong> {{ campaign.start_datetime|date:"g:i A" }} - {{ campaign.end_datetime|date:"g:i A" }}
+                        </div>
+
+                        {% if user.is_staff %}
+                            <a href="{% url 'campaign_manage' campaign.pk %}" class="btn btn-outline-dark btn-sm">
+                                <i class="fa-solid fa-gear me-1"></i> Manage
+                            </a>
+                        {% else %}
+                            <a href="{% url 'join_campaign' campaign.pk %}" class="btn btn-danger btn-sm fw-bold">
+                                Join Campaign <i class="fa-solid fa-arrow-right ms-1"></i>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <div class="text-muted mb-3"><i class="fa-solid fa-calendar-xmark fa-4x"></i></div>
+            <h4>No campaigns found.</h4>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% include 'core/includes/pagination.html' %}
+</div>
+
+{% endblock %}

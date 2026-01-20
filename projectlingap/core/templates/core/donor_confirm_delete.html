@@ -1,0 +1,19 @@
+{% extends 'core/home.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="alert alert-warning text-center" role="alert">
+        <h3 class="alert-heading">Confirm Deletion</h3>
+        <p>Are you sure you want to delete the record for donor: <strong>{{ donor }}</strong>?</p>
+        <hr>
+        <p class="mb-0">This action cannot be undone.</p>
+        
+        <form method="post" class="mt-4">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            <a href="{% url 'donor_list' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="fw-bold mb-0">Manage Blood Unit</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
+
+                        {% if form.instance.pk %}
+                        <div class="row mb-3">
+                            <div class="col-md-8">
+                                <label class="form-label fw-bold text-muted">Source Donor</label>
+                                <input type="text" class="form-control bg-light"
+                                       value="{{ form.instance.donor.user.get_full_name|default:'External / Anonymous' }}" disabled readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold text-muted">Blood Group</label>
+                                <input type="text" class="form-control bg-light fw-bold text-danger"
+                                       value="{{ form.instance.blood_group }}" disabled readonly>
+                            </div>
+                        </div>
+                        <hr>
+                        {% endif %}
+
+                        {% for field in form %}
+
+                            {% if form.instance.pk and field.name == 'donor' or form.instance.pk and field.name == 'blood_group' %}
+                                <div class="d-none">{{ field }}</div>
+
+                            {% else %}
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">{{ field.label }}</label>
+                                    {{ field }}
+
+                                    {% if field.errors %}
+                                        <div class="text-danger small">{{ field.errors.0 }}</div>
+                                    {% endif %}
+
+                                    {% if field.name == 'donor' and not form.instance.pk %}
+                                        <div class="form-text text-muted">Optional: Leave blank for anonymous/external sources.</div>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+
+                        {% endfor %}
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-success fw-bold">
+                                {% if form.instance.pk %}Update Inventory{% else %}Add Stock{% endif %}
+                            </button>
+                            <a href="{% url 'inventory_list' %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('input, select, textarea').forEach(e => {
+        if (!e.hasAttribute('disabled')) e.classList.add('form-control');
+    });
+    document.querySelectorAll('select').forEach(e => e.classList.replace('form-control', 'form-select'));
+</script>
+
+{% endblock %}

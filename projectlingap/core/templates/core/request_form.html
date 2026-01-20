@@ -1,0 +1,89 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0 fw-bold"><i class="fa-solid fa-file-medical me-2"></i>Blood Request Form</h4>
+                </div>
+                <div class="card-body p-4">
+                    <div class="alert alert-info small">
+                        <i class="fa-solid fa-circle-info me-2"></i>
+                        Please ensure all medical details match the physician's order. Requests are subject to verification.
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <h5 class="text-primary mt-3 mb-3 border-bottom pb-2">Patient Information</h5>
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label class="form-label fw-bold">Patient Full Name</label>
+                                {{ form.patient_name }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold">Blood Type Needed</label>
+                                {{ form.patient_blood_type }}
+                            </div>
+                        </div>
+
+                        <h5 class="text-primary mt-3 mb-3 border-bottom pb-2">Medical Details</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Component Required</label>
+                                {{ form.component }}
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label fw-bold">Quantity (Units)</label>
+                                {{ form.quantity }}
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label fw-bold">Urgency</label>
+                                {{ form.urgency }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Reason for Transfusion / Diagnosis</label>
+                            {{ form.reason }}
+                        </div>
+
+                        <h5 class="text-primary mt-3 mb-3 border-bottom pb-2">Hospital & Physician</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Hospital Name</label>
+                                {{ form.hospital_name }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Attending Physician</label>
+                                {{ form.physician_name }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label class="form-label fw-bold">Hospital Address</label>
+                                {{ form.hospital_address }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold">Physician License #</label>
+                                {{ form.physician_license }}
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg fw-bold">Submit Request</button>
+                            <a href="{% url 'donor_dashboard' %}" class="btn btn-light text-muted">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('input, textarea, select').forEach(e => e.classList.add('form-control'));
+</script>
+
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0 fw-bold">Edit Donor Details</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
+
+                        {% if form.instance.pk %}
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-muted">Donor Name (Identity)</label>
+                            <input type="text" class="form-control bg-light"
+                                   value="{{ form.instance.user.get_full_name }}" disabled readonly>
+                        </div>
+                        <hr>
+                        {% endif %}
+
+                        {% for field in form %}
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="text-danger small">{{ field.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-success fw-bold">Save Changes</button>
+                            <a href="{% url 'donor_list' %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script?
+    document.querySelectorAll('input, select, textarea').forEach(e => {
+        if (!e.hasAttribute('disabled')) e.classList.add('form-control');
+    });
+    document.querySelectorAll('select').forEach(e => e.classList.replace('form-control', 'form-select'));
+</script>
+
+{% endblock %}

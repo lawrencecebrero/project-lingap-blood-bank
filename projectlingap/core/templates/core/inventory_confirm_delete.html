@@ -1,0 +1,17 @@
+{% extends 'core/home.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="alert alert-danger text-center shadow-sm" role="alert">
+        <h3 class="alert-heading">Remove Inventory Item?</h3>
+        <p>Are you sure you want to remove Blood Bag Serial: <strong>{{ object.serial_number }}</strong>?</p>
+        <hr>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            <a href="{% url 'inventory_list' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

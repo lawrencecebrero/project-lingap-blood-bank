@@ -1,0 +1,46 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Record Donation</h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-light border">
+                        <strong>Donor:</strong> {{ donor.user.get_full_name }} <br>
+                        <strong>Blood Type:</strong> {{ donor.blood_type }} <br>
+                        <strong>Campaign:</strong> {{ campaign.title }}
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Blood Bag Serial Number</label>
+                            {{ form.serial_number }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Expiry Date</label>
+                            {{ form.expiry_date }}
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success fw-bold">Confirm Donation</button>
+                            <a href="{% url 'campaign_manage' campaign.id %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('input').forEach(e => e.classList.add('form-control'));
+</script>
+
+{% endblock %}

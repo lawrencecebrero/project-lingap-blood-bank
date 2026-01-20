@@ -1,0 +1,95 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="p-5 text-center bg-danger text-white"
+     style="background: linear-gradient(rgba(120,23,31,0.85), rgba(193,32,48,0.85)),
+            url('{% static 'images/prc_bg1.jpg' %}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 85vh;
+            display: flex;
+            align-items: center;">
+
+    <div class="container py-5">
+        <h1 class="display-3 fw-bold mb-3">Give Blood, Save Lives.</h1>
+        <p class="fs-4 mb-5">Your donation is a lifeline for someone in need. Join the Red Cross mission today.</p>
+
+        <div class="d-flex justify-content-center gap-3">
+            {% if user.is_authenticated %}
+                <a href="{% url 'campaign_list' %}" class="btn btn-light btn-lg text-danger fw-bold px-5 shadow">Donate Now</a>
+                <a href="{% url 'request_blood' %}" class="btn btn-outline-light btn-lg fw-bold px-5">Request Blood</a>
+            {% else %}
+                <a href="{% url 'register' %}" class="btn btn-light btn-lg text-danger fw-bold px-5 shadow">Become a Donor</a>
+                <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg fw-bold px-5">Login</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<section id="about" class="py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h2 class="fw-bold text-danger mb-3">About Red Cross - Cavite Chapter</h2>
+                <p class="text-secondary">
+                    The Cavite Chapter of the Philippine Red Cross is dedicated to saving lives through effective blood management. 
+                    <b>Project LINGAP</b> aims to streamline the management of blood donations and inventory.
+                </p>
+                <p class="text-secondary">
+                    Our new system ensures:
+                </p>
+                <ul class="text-muted list-unstyled">
+                    <li><i class="fa-solid fa-check text-success me-2"></i> Faster and more accurate data management.</li>
+                    <li><i class="fa-solid fa-check text-success me-2"></i> Real-time inventory tracking.</li>
+                    <li><i class="fa-solid fa-check text-success me-2"></i> Digitized donor records for quick access.</li>
+                </ul>
+            </div>
+            <div class="col-md-6 text-center">
+                <img src="{% static 'images/prc_logo.png' %}"
+                 alt="Red Cross Cavite Logo"
+                 class="img-fluid"
+                 style="width: 25rem; opacity: 0.2; filter: grayscale(100%);">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Join Our Mission</h2>
+            <p class="text-muted">Whether you want to donate blood or serve the community, your participation matters.</p>
+        </div>
+        <div class="row justify-content-center">
+
+            <div class="col-md-5 mb-4">
+                <div class="card h-100 shadow border-0 text-center p-4">
+                    <div class="card-body">
+                        <div class="mb-3 text-danger"><i class="fa-solid fa-hand-holding-medical fa-3x"></i></div>
+                        <h4 class="card-title fw-bold">Become a Donor</h4>
+                        <p class="card-text text-muted">Register today to help maintain our blood supply. Your donation can save up to three lives.</p>
+                        <a href="{% url 'register' %}" class="btn btn-danger w-100 fw-bold">REGISTER NOW</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-5 mb-4">
+                <div class="card h-100 shadow border-0 text-center p-4">
+                    <div class="card-body">
+                        <div class="mb-3 text-primary"><i class="fa-solid fa-users-rays fa-3x"></i></div>
+                        <h4 class="card-title fw-bold">Be a Red-Cross Volunteer</h4>
+                        <p class="card-text text-muted">Join the Cavite Chapter youth and volunteer arm. Serve humanity and build your character.</p>
+                        <a href="https://www.facebook.com/BatangRedCross/" target="_blank" class="btn btn-primary w-100 fw-bold">
+                            <i class="fa-brands fa-facebook me-2"></i> CONTACT US
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}

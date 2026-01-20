@@ -1,0 +1,100 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-9">
+            <div class="card shadow border-0">
+                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-3">
+                    <h5 class="mb-0 fw-bold">Manage Request</h5>
+                    <span class="badge bg-warning text-dark">{{ object.get_urgency_display }} Priority</span>
+                </div>
+                <div class="card-body p-4">
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6 class="text-danger text-uppercase small fw-bold border-bottom pb-2 mb-3">Patient Information</h6>
+                            <p class="mb-1 fs-5 fw-bold">{{ object.patient_name }}</p>
+                            <p class="mb-0">Blood Needed: <span class="badge bg-danger">{{ object.patient_blood_type }}</span></p>
+                            <p class="text-muted small mt-1">{{ object.component }} ({{ object.quantity }} Units)</p>
+                        </div>
+
+                        <div class="col-md-6 border-start ps-4">
+                            <h6 class="text-primary text-uppercase small fw-bold border-bottom pb-2 mb-3">Requestor Details</h6>
+                            {% if object.requestor %}
+                                <p class="mb-1 fw-bold"><i class="fa-solid fa-user me-2 text-muted"></i>{{ object.requestor.get_full_name|default:object.requestor.username }}</p>
+                                <p class="mb-1 small"><i class="fa-solid fa-envelope me-2 text-muted"></i>{{ object.requestor.email }}</p>
+                                <p class="mb-0 small">
+                                    <i class="fa-solid fa-phone me-2 text-muted"></i>
+                                    {{ object.requestor.donor_profile.contact_no|default:"No contact info available" }}
+                                </p>
+                            {% else %}
+                                <p class="text-muted fst-italic">Unknown Requestor (Legacy Data)</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="bg-light p-3 rounded mb-4">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <small class="text-muted fw-bold">HOSPITAL</small>
+                                <div class="fw-bold">{{ object.hospital_name }}</div>
+                                <div class="small text-muted">{{ object.hospital_address }}</div>
+                            </div>
+                            <div class="col-md-6">
+                                <small class="text-muted fw-bold">PHYSICIAN</small>
+                                <div>Dr. {{ object.physician_name }}</div>
+                                <div class="small text-muted">Lic: {{ object.physician_license }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-light border mb-4">
+                        <strong>Reason for Request:</strong><br>
+                        {{ object.reason }}
+                    </div>
+
+                    <form method="post" class="card card-body bg-light border-secondary">
+                        {% csrf_token %}
+
+                        <h5 class="fw-bold mb-3">Update Disposition</h5>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Action Status</label>
+                            <select name="status" class="form-select" id="statusSelect">
+                                <option value="PENDING" {% if object.status == 'PENDING' %}selected{% endif %}>Pending Validation</option>
+                                <option value="APPROVED" {% if object.status == 'APPROVED' %}selected{% endif %}>Approve & Reserve Blood</option>
+                                <option value="COMPLETED" {% if object.status == 'COMPLETED' %}selected{% endif %}>Mark as Distributed (Complete)</option>
+                                <option value="REJECTED" {% if object.status == 'REJECTED' %}selected{% endif %}>Reject Request</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-danger">
+                                Select Blood Inventory (Required for Approval)
+                            </label>
+                            {{ form.blood_bag }}
+                            <div class="form-text">
+                                Only displaying <strong>{{ object.patient_blood_type }}</strong> bags that are currently Available.
+                            </div>
+                            {% if form.blood_bag.errors %}
+                                <div class="text-danger small fw-bold mt-1">{{ form.blood_bag.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-grid mt-3">
+                            <button type="submit" class="btn btn-primary fw-bold btn-lg">Update Request</button>
+                        </div>
+                    </form>
+
+                    <div class="mt-3 text-center">
+                        <a href="{% url 'request_list' %}" class="text-decoration-none text-muted">Back to List</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
