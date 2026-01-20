@@ -70,7 +70,10 @@ To run this project locally:
 
 **CONTACT**
 -------
+
 Lawrence Cebrero
+
 GitHub: @lawrencecebrero
 Email: lawrence.cebrero@cvsu.edu.ph
+
 Project Link: https://github.com/lawrencecebrero/project-lingap-blood-bank
